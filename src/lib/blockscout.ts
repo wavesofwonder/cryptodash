@@ -179,19 +179,20 @@ export const createBlockscoutClient = (chainId: number): BlockscoutClient | null
 };
 
 // Utility to fetch data across all chains
-export const fetchMultiChainData = async <T>(
-  address: string,
-  fetchFn: (client: BlockscoutClient) => Promise<T>
-): Promise<Array<{ chain: ChainConfig; data: T }>> => {
-  const results = await Promise.allSettled(
-    SUPPORTED_CHAINS.map(async (chain) => {
-      const client = new BlockscoutClient(chain);
-      const data = await fetchFn(client);
-      return { chain, data };
-    })
-  );
+// TODO: Fix TypeScript generic type issue
+// export const fetchMultiChainData = async <T>(
+//   address: string,
+//   fetchFn: (client: BlockscoutClient) => Promise<T>
+// ): Promise<Array<{ chain: ChainConfig; data: T }>> => {
+//   const results = await Promise.allSettled(
+//     SUPPORTED_CHAINS.map(async (chain) => {
+//       const client = new BlockscoutClient(chain);
+//       const data = await fetchFn(client);
+//       return { chain, data };
+//     })
+//   );
 
-  return results
-    .filter((result) => result.status === 'fulfilled')
-    .map(result => (result as PromiseFulfilledResult<{ chain: ChainConfig; data: T }>).value);
-};
+//   return results
+//     .filter((result) => result.status === 'fulfilled')
+//     .map((result) => (result as PromiseFulfilledResult<{ chain: ChainConfig; data: T }>).value);
+// };
