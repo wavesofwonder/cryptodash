@@ -1,0 +1,43 @@
+name: Deploy to IPFS
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build Next.js app
+      run: npm run build
+      
+    - name: Build Chrome extension
+      run: |
+        cp -r out/* extension/
+        cp extension/manifest.json extension/
+        cp extension/popup.html extension/
+        cp extension/background.js extension/
+        
+    - name: Deploy to Fleek
+      if: github.ref == 'refs/heads/main'
+      uses: fleekhq/fleek-deploy@v1
+      with:
+        fleek-api-key: ${{ secrets.FLEEK_API_KEY }}
+        fleek-api-secret: ${{ secrets.FLEEK_API_SECRET }}
+        fleek-site-id: ${{ secrets.FLEEK_SITE_ID }}
+        directory: ./extension

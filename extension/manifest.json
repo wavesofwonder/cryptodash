@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "CryptoDash",
+  "version": "1.0.0",
+  "description": "Local-first crypto dashboard for tracking onchain identity and metrics",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://*/*"
+  ],
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "CryptoDash"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}
