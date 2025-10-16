@@ -2,7 +2,7 @@
 
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
-import { MomentumDashboard } from '../components/MomentumDashboard';
+import { Dashboard } from '../components/Dashboard';
 import { WelcomeScreen } from '../components/WelcomeScreen';
 
 export default function Home() {
@@ -20,11 +20,11 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="relative z-10">
-        {isConnected && address ? (
-          <MomentumDashboard address={address} />
-        ) : (
-          <WelcomeScreen />
-        )}
+                {isConnected && address ? (
+                  <Dashboard address={address} />
+                ) : (
+                  <WelcomeScreen />
+                )}
       </main>
     </div>
   );

@@ -8,11 +8,11 @@ import { RecentActivityCard } from './RecentActivityCard';
 import { QuickStatsCard } from './QuickStatsCard';
 import { ChatAssistant } from './ChatAssistant';
 
-interface MomentumDashboardProps {
+interface DashboardProps {
   address: string;
 }
 
-export function MomentumDashboard({ address }: MomentumDashboardProps) {
+export function Dashboard({ address }: DashboardProps) {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isLoading, setIsLoading] = useState(true);
 

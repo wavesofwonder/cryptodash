@@ -16,10 +16,7 @@ export function HeroGreeting({ address }: HeroGreetingProps) {
       {/* Greeting */}
       <div className="space-y-4">
         <div className="text-6xl font-bold bg-gradient-to-r from-amber-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
-          gm
-        </div>
-        <div className="text-2xl text-gray-300 font-light">
-          {displayName}
+          gm {displayName}
         </div>
       </div>
 

@@ -53,66 +53,47 @@ export function ChainActivityCard({ address }: ChainActivityCardProps) {
       initial={{ opacity: 0, scale: 0.9, x: 20 }}
       animate={{ opacity: 1, scale: 1, x: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className={`backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-6 transition-all duration-300 ${
-        isExpanded ? 'w-80' : 'w-64'
+      className={`backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl transition-all duration-300 cursor-pointer hover:bg-white/15 ${
+        isExpanded ? 'p-4 w-80' : 'p-3 w-48'
       }`}
-      onMouseEnter={() => setIsExpanded(true)}
-      onMouseLeave={() => setIsExpanded(false)}
+      onClick={() => setIsExpanded(!isExpanded)}
     >
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-white/90">Active Chains</h3>
-          <div className="text-sm text-white/60">{data.length} chains</div>
-        </div>
-
-        <div className="space-y-3">
-          {data.map((chain, index) => (
-            <motion.div
-              key={chain.id}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 + index * 0.1 }}
-              className="flex items-center justify-between"
-            >
-              <div className="flex items-center space-x-3">
-                <div className={`w-3 h-3 rounded-full ${getActivityColor(chain.activity)} ${getActivityGlow(chain.activity)} shadow-lg`} />
-                <span className="text-sm font-medium text-white/90">{chain.name}</span>
-              </div>
-              <div className="text-right">
-                <div className="text-sm text-white/80">{chain.txCount} txs</div>
-                <div className="text-xs text-white/60">
-                  {new Date(chain.lastActivity).toLocaleDateString()}
-                </div>
-              </div>
-            </motion.div>
+      {/* Minimal View */}
+      <div className="space-y-2">
+        <div className="text-xs text-gray-300">Chains</div>
+        <div className="flex space-x-2">
+          {data.slice(0, 3).map((chain, index) => (
+            <div key={chain.id} className="flex items-center space-x-1">
+              <div className={`w-2 h-2 rounded-full ${getActivityColor(chain.activity)}`} />
+              <span className="text-xs text-white/80">{chain.name.slice(0, 3)}</span>
+            </div>
           ))}
         </div>
-
-        {isExpanded && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="pt-4 border-t border-white/20"
-          >
-            <div className="text-sm text-white/60 mb-2">Activity levels:</div>
-            <div className="flex space-x-4 text-xs">
-              <div className="flex items-center space-x-1">
-                <div className="w-2 h-2 rounded-full bg-green-400"></div>
-                <span className="text-white/80">High</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
-                <span className="text-white/80">Medium</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-                <span className="text-white/80">Low</span>
-              </div>
-            </div>
-          </motion.div>
-        )}
+        <div className="text-sm text-white/60">{data.length} active</div>
       </div>
+
+      {/* Expanded View */}
+      {isExpanded && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+          className="space-y-3 pt-3 border-t border-white/20 mt-3"
+        >
+          {data.map((chain, index) => (
+            <div key={chain.id} className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div className={`w-2 h-2 rounded-full ${getActivityColor(chain.activity)}`} />
+                <span className="text-sm text-white/90">{chain.name}</span>
+              </div>
+              <div className="text-xs text-white/60">{chain.txCount} txs</div>
+            </div>
+          ))}
+          <div className="text-xs text-gray-400">
+            Click to collapse
+          </div>
+        </motion.div>
+      )}
     </motion.div>
   );
 }

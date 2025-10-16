@@ -93,33 +93,48 @@ export function RecentActivityCard({ address }: RecentActivityCardProps) {
       initial={{ opacity: 0, scale: 0.9, y: 20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.3 }}
-      className={`backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-6 transition-all duration-300 ${
-        isExpanded ? 'w-96' : 'w-80'
+      className={`backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl transition-all duration-300 cursor-pointer hover:bg-white/15 ${
+        isExpanded ? 'p-4 w-80' : 'p-3 w-48'
       }`}
-      onMouseEnter={() => setIsExpanded(true)}
-      onMouseLeave={() => setIsExpanded(false)}
+      onClick={() => setIsExpanded(!isExpanded)}
     >
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-white/90">Recent Activity</h3>
-          <div className="text-sm text-white/60">{data.length} txs</div>
+      {/* Minimal View */}
+      <div className="space-y-2">
+        <div className="text-xs text-gray-300">Activity</div>
+        <div className="space-y-1">
+          {data.slice(0, 2).map((tx, index) => (
+            <div key={tx.hash} className="flex items-center space-x-2">
+              <div className={`text-sm ${getTypeColor(tx.type)}`}>
+                {getTypeIcon(tx.type)}
+              </div>
+              <div className="text-xs text-white/80">
+                {tx.amount} {tx.token}
+              </div>
+              <div className="text-xs text-white/60">
+                {formatTime(tx.timestamp)}
+              </div>
+            </div>
+          ))}
         </div>
+        <div className="text-sm text-white/60">{data.length} recent</div>
+      </div>
 
-        <div className="space-y-3">
+      {/* Expanded View */}
+      {isExpanded && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+          className="space-y-3 pt-3 border-t border-white/20 mt-3"
+        >
           {data.map((tx, index) => (
-            <motion.div
-              key={tx.hash}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 + index * 0.1 }}
-              className="flex items-center justify-between p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
-            >
-              <div className="flex items-center space-x-3">
-                <div className={`text-lg ${getTypeColor(tx.type)}`}>
+            <div key={tx.hash} className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div className={`text-sm ${getTypeColor(tx.type)}`}>
                   {getTypeIcon(tx.type)}
                 </div>
                 <div>
-                  <div className="text-sm font-medium text-white/90">
+                  <div className="text-sm text-white/90">
                     {tx.amount} {tx.token}
                   </div>
                   <div className="text-xs text-white/60">{tx.chain}</div>
@@ -133,23 +148,13 @@ export function RecentActivityCard({ address }: RecentActivityCardProps) {
                 </div>
                 <div className="text-xs text-white/60">{formatTime(tx.timestamp)}</div>
               </div>
-            </motion.div>
+            </div>
           ))}
-        </div>
-
-        {isExpanded && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="pt-4 border-t border-white/20"
-          >
-            <button className="text-sm text-amber-400 hover:text-amber-300 transition-colors">
-              View all transactions →
-            </button>
-          </motion.div>
-        )}
-      </div>
+          <div className="text-xs text-gray-400">
+            Click to collapse
+          </div>
+        </motion.div>
+      )}
     </motion.div>
   );
 }
